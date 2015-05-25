@@ -1,106 +1,92 @@
-public class ParkingLot 
-{
-    Vector<ParkingSpace> vacantParkingSpaces = null;
-    Vector<ParkingSpace> fullParkingSpaces = null;
+package com.fengqi.plms;
 
-    int parkingSpaceCount = 0;
+import java.util.HashMap;
+import java.util.Map;
 
-    boolean isFull;
-    boolean isEmpty;
-
-    ParkingSpace findNearestVacant(ParkingType type)
-    {
-        Iterator<ParkingSpace> itr = vacantParkingSpaces.iterator();
-
-        while(itr.hasNext())
-        {
-            ParkingSpace parkingSpace = itr.next();
-
-            if(parkingSpace.parkingType == type)
-            {
-                return parkingSpace;
-            }
-        }
-        return null;
-    }
-
-    void parkVehicle(ParkingType type, Vehicle vehicle)
-    {
-        if(!isFull())
-        {
-            ParkingSpace parkingSpace = findNearestVacant(type);
-
-            if(parkingSpace != null)
-            {
-                parkingSpace.vehicle = vehicle;
-                parkingSpace.isVacant = false;
-
-                vacantParkingSpaces.remove(parkingSpace);
-                fullParkingSpaces.add(parkingSpace);
-
-                if(fullParkingSpaces.size() == parkingSpaceCount)
-                    isFull = true;
-
-                isEmpty = false;
-            }
-        }
-    }
-
-    void releaseVehicle(Vehicle vehicle)
-    {
-        if(!isEmpty())
-        {
-            Iterator<ParkingSpace> itr = fullParkingSpaces.iterator();
-
-            while(itr.hasNext())
-            {
-                ParkingSpace parkingSpace = itr.next();
-
-                if(parkingSpace.vehicle.equals(vehicle))
-                {
-                    fullParkingSpaces.remove(parkingSpace);
-                    vacantParkingSpaces.add(parkingSpace);
-
-                    parkingSpace.isVacant = true;
-                    parkingSpace.vehicle = null;
-
-                    if(vacantParkingSpaces.size() == parkingSpaceCount)
-                        isEmpty = true;
-
-                    isFull = false;
-                }
-            }
-        }
-    }
-
-    boolean isFull()
-    {
-        return isFull;
-    }
-
-    boolean isEmpty()
-    {
-        return isEmpty;
-    }
+public class ParkingLot {
+public static void main(char[] args) {
+	System.out.println("HHH");
 }
 
-public class ParkingSpace 
-{
-    boolean isVacant;
-    Vehicle vehicle;
-    ParkingType parkingType;
-    int distance;
+public class Car {
+	public String plate;
 }
 
-public class Vehicle 
-{
-    int num;
+private static final int MAX_SPACES = 100;
+
+private static final int NUM_OF_ENTRENCES = 5;
+private static final int NUM_OF_EXITS = 4;
+
+private Car[] parkings;
+
+private Entrence[] entrences = new Entrence[NUM_OF_ENTRENCES];
+private Exit[] exits = new Exit[NUM_OF_EXITS];
+
+public class Entrence {
+	private int number;
+	
+	public void open() {
+		
+	}
+	public void close() {
+		
+	}
 }
 
-public enum ParkingType
-{
-    REGULAR,
-    HANDICAPPED,
-    COMPACT,
-    MAX_PARKING_TYPE,
+public class Exit {
+	private int number;
+	
+	public void open() {
+		
+	}
+	public void close() {
+		
+	}
+}
+
+void initialize() {
+	parkings = new Car[MAX_SPACES];
+		
+	for (Entrence entr : entrences) {
+		entr.close();
+	}
+	
+	for (Exit ex : exits) {
+		ex.close();
+	}
+}
+
+private int findAvailableSpace() {
+	int result = -1;
+	for(int i = 0; i < parkings.length; i++) {
+		if (parkings[i] == null) {
+			result = i;
+			break;
+		}
+	}
+	return result;
+}
+
+private void issueTicket(Car car) {
+	
+}
+
+private void charge(Car car) {
+	
+}
+
+void handleArrival(Car car, Entrence entr) {
+	int found = findAvailableSpace();
+	if (found != -1) {
+		entr.open();
+		issueTicket(car);
+		entr.close();
+	}
+}
+
+void handleLeaving(Car car, Exit ex) {
+	charge(car);
+	ex.open();
+	ex.close();
+}
 }
